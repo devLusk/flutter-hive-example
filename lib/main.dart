@@ -4,7 +4,6 @@ import 'package:hive_local_storage/hive_local_storage.dart';
 
 void main() async {
   await Hive.initFlutter();
-
   await Hive.openBox("testBox");
 
   runApp(const MyApp());

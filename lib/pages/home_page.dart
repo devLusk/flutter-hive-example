@@ -37,14 +37,23 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   // Cancel button
                   ElevatedButton(
-                    onPressed: Navigator.of(context).pop,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _textController.clear();
+                    },
                     child: Text("Cancel"),
                   ),
 
                   SizedBox(width: 10),
 
                   // Add button
-                  ElevatedButton(onPressed: null, child: Text("Add")),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      addTodo();
+                    },
+                    child: Text("Add"),
+                  ),
                 ],
               ),
             ],
@@ -53,12 +62,50 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Data manipulation methods
+  void addTodo() {
+    String todo = _textController.text;
+    if (todo.isNotEmpty) {
+      setState(() {
+        todos.add(todo);
+        _textController.clear();
+      });
+      saveDataBase();
+    }
+  }
+
+  void deleteTodo(int index) {
+    setState(() {
+      todos.removeAt(index);
+    });
+    saveDataBase();
+  }
+
+  void saveDataBase() {
+    _testBox.put("todoList", todos);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Add button
       floatingActionButton: FloatingActionButton(
         onPressed: openDialogBox,
         child: Icon(Icons.add),
+      ),
+
+      // ListView of todos
+      body: ListView.builder(
+        itemCount: todos.length,
+        itemBuilder: (context, index) {
+          final todo = todos[index];
+          return ListTile(
+            title: Text(todo),
+            trailing: IconButton(
+              onPressed: () => deleteTodo(index),
+              icon: Icon(Icons.delete),
+            ),
+          );
+        },
       ),
     );
   }
