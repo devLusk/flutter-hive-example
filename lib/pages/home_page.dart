@@ -48,7 +48,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Add button
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        title: const Text("ToDo w/ Hive DB"),
+        centerTitle: true,
+        backgroundColor: Colors.blueGrey[900],
+        foregroundColor: Colors.white,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed:
             () => showDialog(
@@ -59,22 +65,39 @@ class _HomePageState extends State<HomePage> {
                     onAdd: addTodo,
                   ),
             ),
-        child: Icon(Icons.add),
+        backgroundColor: Colors.blueGrey[700],
+        child: Icon(Icons.add, color: Colors.white),
       ),
-
-      // ListView of todos
-      body: ListView.builder(
-        itemCount: todos.length,
-        itemBuilder: (context, index) {
-          final todo = todos[index];
-          return ListTile(
-            title: Text(todo),
-            trailing: IconButton(
-              onPressed: () => deleteTodo(index),
-              icon: Icon(Icons.delete),
-            ),
-          );
-        },
+      body: Padding(
+        padding: EdgeInsets.all(24.0),
+        child: ListView.builder(
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            final todo = todos[index];
+            return Container(
+              margin: EdgeInsets.only(top: 10),
+              decoration: BoxDecoration(
+                color: Colors.blueGrey[50],
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withValues(alpha: 0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: ListTile(
+                title: Text(todo, style: TextStyle(fontSize: 16)),
+                trailing: IconButton(
+                  onPressed: () => deleteTodo(index),
+                  icon: Icon(Icons.delete, color: Colors.red[300]),
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
