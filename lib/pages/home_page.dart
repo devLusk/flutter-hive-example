@@ -9,29 +9,57 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // Get the box
+  // Controllers and variables
   final _testBox = Hive.box("testBox");
-
-  // Text controller (to get user input)
   final _textController = TextEditingController();
-
-  // list of todos
   List todos = [];
 
   @override
   void initState() {
-    // load data, if none exist then default to empty list
-    todos = _testBox.get("todoList") ?? [];
-
     super.initState();
+    // Load existing data or initialize with an empty list
+    todos = _testBox.get("todoList") ?? [];
   }
 
-  // add new todo
+  // Dialog box
+  void openDialogBox() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text("Add new task"),
+            content: TextField(
+              controller: _textController,
+              decoration: InputDecoration(hintText: "Task name"),
+            ),
+            actions: [
+              Row(
+                children: [
+                  // Cancel button
+                  ElevatedButton(
+                    onPressed: Navigator.of(context).pop,
+                    child: Text("Cancel"),
+                  ),
 
-  // delete todo
+                  SizedBox(width: 10),
 
+                  // Add button
+                  ElevatedButton(onPressed: null, child: Text("Add")),
+                ],
+              ),
+            ],
+          ),
+    );
+  }
+
+  // Data manipulation methods
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: openDialogBox,
+        child: Icon(Icons.add),
+      ),
+    );
   }
 }
